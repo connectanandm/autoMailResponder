@@ -12,8 +12,8 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve frontend
-const frontendPath = path.join(__dirname, '../frontend');
+// ✅ Serve frontend from root/frontend/
+const frontendPath = path.join(__dirname, 'frontend');
 app.use(express.static(frontendPath));
 
 // Session middleware
@@ -67,7 +67,7 @@ app.get('/logout', (req, res, next) => {
   });
 });
 
-// Auto-responder route
+// Auto-responder API
 app.post('/api/auto-responder', async (req, res) => {
   if (!req.user || !req.user.accessToken) {
     return res.status(401).json({ error: 'User not authenticated' });
@@ -100,7 +100,7 @@ app.post('/api/auto-responder', async (req, res) => {
   }
 });
 
-// Fallback
+// Fallback: serve index.html for all unknown routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
