@@ -67,14 +67,13 @@ app.get('/logout', (req, res, next) => {
   });
 });
 
-// Auto-responder API
+// ✅ Auto-responder API
 app.post('/api/auto-responder', async (req, res) => {
   if (!req.user || !req.user.accessToken) {
     return res.status(401).json({ error: 'User not authenticated' });
   }
 
-  const hardcodedMessage = 'Received your message. Our development team will look into this and respond to you at the earliest.';
-  const { active } = req.body;
+  const { active, message } = req.body;
 
   try {
     const oauth2Client = new google.auth.OAuth2();
@@ -87,7 +86,7 @@ app.post('/api/auto-responder', async (req, res) => {
       requestBody: {
         enableAutoReply: active,
         responseSubject: 'Auto Reply',
-        responseBodyPlainText: hardcodedMessage,
+        responseBodyPlainText: message || 'Hi, I’m currently away and will get back to you soon.',
         restrictToContacts: false,
         restrictToDomain: false
       }
@@ -100,7 +99,7 @@ app.post('/api/auto-responder', async (req, res) => {
   }
 });
 
-// Fallback: serve index.html for all unknown routes
+// Fallback route
 app.get('*', (req, res) => {
   res.sendFile(path.join(frontendPath, 'index.html'));
 });
