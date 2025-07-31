@@ -86,7 +86,14 @@ app.post('/api/auto-responder', async (req, res) => {
       requestBody: {
         enableAutoReply: active,
         responseSubject: 'Auto Reply',
-        responseBodyPlainText: message || 'Hi, I’m currently away and will get back to you soon.',
+        responseBodyPlainText: message || 
+`Hello,
+Received your mail, our development team will look into this and contact you soon.
+
+Note: This is an auto generated response, kindly ignore if subject is not related to the business.
+
+Thank you,
+Team connectsanand`,
         restrictToContacts: false,
         restrictToDomain: false
       }
